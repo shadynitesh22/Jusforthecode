@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ConnectionManager</string>
+
+    <string name="check_connection">Check Connection</string>
+</resources>
