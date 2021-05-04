@@ -1,17 +1,19 @@
 package com.example.connectionmanager
 
-import android.content.Context
-import android.hardware.SensorManager
+import android.app.Service
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private  var connectivityManager: ConnectivityManager? = null
+
+  var context = this
+    var connectivity : ConnectivityManager? = null
+    var info : NetworkInfo? = null
 
 
     private lateinit var btn1: Button
@@ -22,25 +24,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-     connectivityManager =getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        btn1 =  findViewById(R.id.btn1)
+
+        btn1 = findViewById(R.id.btn1)
 
 
         btn1.setOnClickListener {
-            val activeNetwork: NetworkInfo? = connectivityManager!!.activeNetworkInfo
-            val isconnected: Boolean = activeNetwork?.isConnectedOrConnecting==true
-            if(isconnected)
-                Toast.makeText(this, "You are connected to the Internet", Toast.LENGTH_SHORT).show()
-            else{
-                Toast.makeText(this, "You are not connected to the Internet", Toast.LENGTH_SHORT).show()
 
+            connectivity = context.getSystemService(Service.CONNECTIVITY_SERVICE)
+
+                    as ConnectivityManager
+            if ( connectivity != null)
+            {
+                info = connectivity!!.activeNetworkInfo
+
+                if (info != null)
+                {
+                    if (info!!.state == NetworkInfo.State.CONNECTED)
+                    {
+                        Toast.makeText(context, "CONNECTED", Toast.LENGTH_LONG).show()
+                    }
+                }
+                else
+                {
+                    Toast.makeText(context, "NOT CONNECTED", Toast.LENGTH_LONG).show()
+                }
             }
 
 
         }
 
     }
-
-
 }
+
